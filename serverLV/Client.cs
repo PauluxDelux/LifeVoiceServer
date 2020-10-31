@@ -41,6 +41,22 @@ namespace GameServer
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
                 // TODO: paquet de bienvenue
+                ServerSend.Welcome(id, $"Welcome to the server !");
+            }
+
+            public void SendData(Packet _packet)
+            {
+                try
+                {
+                    if (socket != null)
+                    {
+                        stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
+                    }
+                }
+                catch (Exception _exception)
+                {
+                    Console.WriteLine($"Exception occured while sending data: {_exception}.");
+                }
             }
 
             private void ReceiveCallback(IAsyncResult _result)
