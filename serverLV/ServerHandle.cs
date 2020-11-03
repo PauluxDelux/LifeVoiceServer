@@ -20,9 +20,18 @@ namespace GameServer
 
         public static void UDPTestReceived(int _fromClient, Packet _packet)
         {   
-            Console.WriteLine("Let's debug UDP packet");
+            Console.WriteLine("DEBUG UDP PACKET");
+            Console.WriteLine($"Received a Packet Length: {_packet.Length()}.");
+
+            _packet.ReadInt();
             string message = _packet.ReadString();
             Console.WriteLine($"UDP packet received: {message}.");
+        }
+
+        public static void UDPAtlernative(int _fromClient, Packet _packet)
+        {
+            string message = _packet.ReadString();
+            Console.WriteLine($"UDP Alternative packet received: {message}.");
         }
 
     }

@@ -35,7 +35,7 @@ namespace GameServer
 
             tcpListener = new TcpListener(IPAddress.Any, server_port);
             tcpListener.Start();
-            tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
+            tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
 
             udpListener = new UdpClient(server_port);
             udpListener.BeginReceive(UDPReceiveCallback, null);
@@ -46,7 +46,7 @@ namespace GameServer
         private static void TCPConnectCallback(IAsyncResult _result)
         {
             TcpClient tcpClient = tcpListener.EndAcceptTcpClient(_result);
-            tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
+            tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Console.WriteLine($"Incoming connection from {tcpClient.Client.RemoteEndPoint}...");
 
             for (int i = 1; i <= game_max_players; i++)
@@ -107,6 +107,7 @@ namespace GameServer
             {
                 if (_clientEndPoint != null)
                 {
+                    Console.WriteLine($"[DEBUG] UDP packet length: {_packet.Length()}");
                     udpListener.BeginSend(_packet.ToArray(), _packet.Length(), _clientEndPoint, null, null);
                 }
             }
@@ -125,7 +126,8 @@ namespace GameServer
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int) ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int) ClientPackets.udpTestReceived, ServerHandle.UDPTestReceived }
+                { (int) ClientPackets.udpTestReceived, ServerHandle.UDPTestReceived },
+                { (int) ClientPackets.udpAlternative, ServerHandle.UDPAtlernative }
             };
             Console.WriteLine($"Initialized packets");
         }
