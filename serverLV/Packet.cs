@@ -15,8 +15,8 @@ namespace GameServer
     public enum ClientPackets
     {
         welcomeReceived = 1,
-        udpTestReceived = 2,
-        udpAlternative = 3
+        udpTestReceived
+
     }
 
     public class Packet : IDisposable

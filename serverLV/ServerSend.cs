@@ -76,7 +76,7 @@ namespace GameServer
         {
             using (Packet packet = new Packet((int)ServerPackets.udpTest))
             {
-                packet.Write("A test packet to check UDP protocol");
+                packet.Write("A test packet for UDP.");
 
                 SendUDPData(_toClient, packet);
             }
