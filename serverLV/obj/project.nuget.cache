@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "JfGEMIKD5KN2IKnQIFCtVa4Pv+J+vq8xLhYOjV6S0/P5wvvkjYNHVa8dbSuRC56bzpkBUZvhasQJX3x/xbMU9g==",
+  "dgSpecHash": "PcUDXW8gvEmLb8Ts8G817Qe8WDAn//ZnVVSBNQNw9AGeaREHoE9ub/fCoe7WWcxhvPhTPMEZotH4L84Zw8Y8eA==",
   "success": true,
   "projectFilePath": "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/serverLV.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/paul_bavazzano/.nuget/packages/microsoft.netcore.app.ref/3.0.0/microsoft.netcore.app.ref.3.0.0.nupkg.sha512",
+    "/Users/paul_bavazzano/.nuget/packages/microsoft.aspnetcore.app.ref/3.0.1/microsoft.aspnetcore.app.ref.3.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

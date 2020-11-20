@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-//using UnityEngine;
+using System.Text;
+
 namespace GameServer
 {
-
     class ThreadManager
     {
         private static readonly List<Action> executeOnMainThread = new List<Action>();
@@ -16,7 +16,7 @@ namespace GameServer
         {
             if (_action == null)
             {
-                Console.WriteLine($"No action to execute on main thread!");
+                Console.WriteLine("No action to execute on main thread!");
                 return;
             }
 

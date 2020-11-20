@@ -1,0 +1,12 @@
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/bin/Debug/netcoreapp3.0/serverLV.deps.json
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/bin/Debug/netcoreapp3.0/serverLV.runtimeconfig.json
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/bin/Debug/netcoreapp3.0/serverLV.runtimeconfig.dev.json
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/bin/Debug/netcoreapp3.0/serverLV.dll
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/bin/Debug/netcoreapp3.0/serverLV.pdb
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.csprojAssemblyReference.cache
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.AssemblyInfoInputs.cache
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.AssemblyInfo.cs
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.csproj.CoreCompileInputs.cache
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.dll
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.pdb
+/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/Debug/netcoreapp3.0/serverLV.genruntimeconfig.cache

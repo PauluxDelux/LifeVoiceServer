@@ -1,27 +1,30 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
 namespace GameServer
 {
-
     class Client
     {
         public static int dataBufferSize = 4096;
+
         public int id;
         public TCP tcp;
         public UDP udp;
 
-        public Client(int _id)
+        public Client(int _clientId)
         {
-            id = _id;
+            id = _clientId;
             tcp = new TCP(id);
-            udp = new UDP(id); 
+            udp = new UDP(id);
         }
 
         public class TCP
         {
             public TcpClient socket;
+
             private readonly int id;
             private NetworkStream stream;
             private Packet receivedData;
@@ -45,8 +48,7 @@ namespace GameServer
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
-                // TODO: paquet de bienvenue
-                ServerSend.Welcome(id, $"Welcome to the server !");
+                ServerSend.Welcome(id, "Welcome to the server!");
             }
 
             public void SendData(Packet _packet)
@@ -58,9 +60,9 @@ namespace GameServer
                         stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
                     }
                 }
-                catch (Exception _exception)
+                catch (Exception _ex)
                 {
-                    Console.WriteLine($"Exception occured while sending data: {_exception}.");
+                    Console.WriteLine($"Error sending data to player {id} via TCP: {_ex}");
                 }
             }
 
@@ -68,97 +70,109 @@ namespace GameServer
             {
                 try
                 {
-                    int byteLength = stream.EndRead(_result);
-                    if (byteLength <= 0)
+                    int _byteLength = stream.EndRead(_result);
+                    if (_byteLength <= 0)
                     {
                         // TODO: disconnect
                         return;
                     }
-                    byte[] data = new byte[byteLength];
-                    Array.Copy(receiveBuffer, data, byteLength);
 
-                    receivedData.Reset(HandleData(data));
+                    byte[] _data = new byte[_byteLength];
+                    Array.Copy(receiveBuffer, _data, _byteLength);
+
+                    receivedData.Reset(HandleData(_data));
                     stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
                 }
-                catch (Exception _exception)
+                catch (Exception _ex)
                 {
-                    Console.WriteLine($"Exception occured while receiving data: {_exception}.");
+                    Console.WriteLine($"Error receiving TCP data: {_ex}");
+                    // TODO: disconnect
                 }
             }
 
-            private bool HandleData(byte[] data)
+            private bool HandleData(byte[] _data)
             {
-                int packetLength = 0;
-                receivedData.SetBytes(data);
+                int _packetLength = 0;
+
+                receivedData.SetBytes(_data);
 
                 if (receivedData.UnreadLength() >= 4)
                 {
-                    packetLength = receivedData.ReadInt();
-                    if (packetLength <= 0)
+                    _packetLength = receivedData.ReadInt();
+                    if (_packetLength <= 0)
                     {
                         return true;
                     }
                 }
-                while (packetLength > 0 && packetLength <= receivedData.UnreadLength())
+
+                while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength())
                 {
-                    byte[] packetBytes = receivedData.ReadBytes(packetLength);
+                    byte[] _packetBytes = receivedData.ReadBytes(_packetLength);
                     ThreadManager.ExecuteOnMainThread(() =>
                     {
-                        using (Packet packet = new Packet(packetBytes))
+                        using (Packet _packet = new Packet(_packetBytes))
                         {
-                            int packetId = packet.ReadInt();
-                            Server.packetHandlers[packetId](id, packet);
+                            int _packetId = _packet.ReadInt();
+                            Server.packetHandlers[_packetId](id, _packet);
                         }
                     });
-                    packetLength = 0;
+
+                    _packetLength = 0;
                     if (receivedData.UnreadLength() >= 4)
                     {
-                        packetLength = receivedData.ReadInt();
-                        if (packetLength <= 0)
+                        _packetLength = receivedData.ReadInt();
+                        if (_packetLength <= 0)
                         {
                             return true;
                         }
                     }
                 }
-                if (packetLength <= 1)
+
+                if (_packetLength <= 1)
                 {
                     return true;
                 }
+
                 return false;
             }
         }
-    
-        public class UDP{
 
+        public class UDP
+        {
             public IPEndPoint endPoint;
+
             private int id;
 
-            public UDP(int _id){
+            public UDP(int _id)
+            {
                 id = _id;
             }
 
-            public void Connect(IPEndPoint _endPoint){
+            public void Connect(IPEndPoint _endPoint)
+            {
                 endPoint = _endPoint;
                 ServerSend.UDPTest(id);
             }
 
-            public void SendData(Packet _packet){
+            public void SendData(Packet _packet)
+            {
                 Server.SendUDPData(endPoint, _packet);
             }
 
-            public void HandleData(Packet _packet){
-                int packetLength = _packet.ReadInt();
-                byte[] packetBytes = _packet.ReadBytes(packetLength); 
+            public void HandleData(Packet _packetData)
+            {
+                int _packetLength = _packetData.ReadInt();
+                byte[] _packetBytes = _packetData.ReadBytes(_packetLength);
 
-                ThreadManager.ExecuteOnMainThread(() => {
-                    using (Packet packet = new Packet(packetBytes) )
+                ThreadManager.ExecuteOnMainThread(() =>
+                {
+                    using (Packet _packet = new Packet(_packetBytes))
                     {
-                        int packetId = packet.ReadInt();
-                        Server.packetHandlers[packetId](id, _packet);
+                        int _packetId = _packet.ReadInt();
+                        Server.packetHandlers[_packetId](id, _packet);
                     }
                 });
             }
         }
     }
 }
-
