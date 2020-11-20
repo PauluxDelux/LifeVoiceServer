@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Numerics;
 
 namespace GameServer
 {
@@ -11,6 +12,8 @@ namespace GameServer
         public static int dataBufferSize = 4096;
 
         public int id;
+
+        public Player player;
         public TCP tcp;
         public UDP udp;
 
@@ -174,5 +177,30 @@ namespace GameServer
                 });
             }
         }
+
+        public void SendIntoGame(string _playerName)
+        {
+            player = new Player(id, _playerName, new Vector2(0, 0));
+
+            foreach (Client c in Server.clients.Values)
+            {
+                if (c.player != null)
+                {
+                    if (c.id != id)
+                    {
+                        ServerSend.SpawnPlayer(id, c.player);
+                    }
+                }
+            }
+
+            foreach (Client c in Server.clients.Values)
+            {
+                if (c.player != null)
+                {
+                    ServerSend.SpawnPlayer(c.id, player);
+                }
+            }
+        }
+
     }
 }
