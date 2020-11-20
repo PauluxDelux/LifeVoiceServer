@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/serverLV.csproj": {}
+    "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/GameServer.csproj": {}
   },
   "projects": {
-    "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/serverLV.csproj": {
+    "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/GameServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/serverLV.csproj",
-        "projectName": "serverLV",
-        "projectPath": "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/serverLV.csproj",
+        "projectUniqueName": "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/GameServer.csproj",
+        "projectName": "GameServer",
+        "projectPath": "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/GameServer.csproj",
         "packagesPath": "/Users/paul_bavazzano/.nuget/packages/",
         "outputPath": "/Users/paul_bavazzano/github-clone/LifeVoiceServer/serverLV/obj/",
         "projectStyle": "PackageReference",

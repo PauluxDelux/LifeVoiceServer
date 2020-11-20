@@ -1,103 +1,95 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Collections.Generic;
 
 namespace GameServer
 {
     class Server
     {
-
-        public static int game_max_players
-        {
-            get;
-            private set;
-        }
+        public static int MaxPlayers { get; private set; }
+        public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
         public static Dictionary<int, PacketHandler> packetHandlers;
-        public static int server_port
-        {
-            get;
-            private set;
-        }
 
         private static TcpListener tcpListener;
         private static UdpClient udpListener;
 
-        public static void Start(int _game_max_players, int _port)
+        public static void Start(int _maxPlayers, int _port)
         {
-            game_max_players = _game_max_players;
-            server_port = _port;
+            MaxPlayers = _maxPlayers;
+            Port = _port;
 
-            Console.WriteLine($"Starting server ...");
+            Console.WriteLine("Starting server...");
             InitializeServerData();
 
-            tcpListener = new TcpListener(IPAddress.Any, server_port);
+            tcpListener = new TcpListener(IPAddress.Any, Port);
             tcpListener.Start();
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
 
-            udpListener = new UdpClient(server_port);
+            udpListener = new UdpClient(Port);
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
-            Console.WriteLine($"Server started on Port {server_port}.");
+            Console.WriteLine($"Server started on port {Port}.");
         }
 
         private static void TCPConnectCallback(IAsyncResult _result)
         {
-            TcpClient tcpClient = tcpListener.EndAcceptTcpClient(_result);
+            TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-            Console.WriteLine($"Incoming connection from {tcpClient.Client.RemoteEndPoint}...");
+            Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint}...");
 
-            for (int i = 1; i <= game_max_players; i++)
+            for (int i = 1; i <= MaxPlayers; i++)
             {
                 if (clients[i].tcp.socket == null)
                 {
-                    clients[i].tcp.Connect(tcpClient);
+                    clients[i].tcp.Connect(_client);
                     return;
                 }
             }
 
-            Console.WriteLine($"{tcpClient.Client.RemoteEndPoint} failed to connect: Server is full.");
+            Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 
         private static void UDPReceiveCallback(IAsyncResult _result)
         {
             try
             {
-                IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                byte[] data = udpListener.EndReceive(_result, ref clientEndPoint);
+                IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] _data = udpListener.EndReceive(_result, ref _clientEndPoint);
                 udpListener.BeginReceive(UDPReceiveCallback, null);
 
-                if (data.Length < 4)
+                if (_data.Length < 4)
                 {
                     return;
                 }
 
-                using (Packet packet = new Packet(data))
+                using (Packet _packet = new Packet(_data))
                 {
-                    int clientId = packet.ReadInt();
+                    int _clientId = _packet.ReadInt();
 
-                    if (clientId == 0)
+                    if (_clientId == 0)
                     {
                         return;
                     }
 
-                    if (clients[clientId].udp.endPoint == null)
+                    if (clients[_clientId].udp.endPoint == null)
                     {
-                        clients[clientId].udp.Connect(clientEndPoint);
+                        clients[_clientId].udp.Connect(_clientEndPoint);
                         return;
                     }
 
-                    if (clients[clientId].udp.endPoint.ToString() == clientEndPoint.ToString())
+                    if (clients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())
                     {
-                        clients[clientId].udp.HandleData(packet);
+                        clients[_clientId].udp.HandleData(_packet);
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception _ex)
             {
-                Console.WriteLine($"Error while receiving UDP data: {exception}");
+                Console.WriteLine($"Error receiving UDP data: {_ex}");
             }
         }
 
@@ -107,28 +99,28 @@ namespace GameServer
             {
                 if (_clientEndPoint != null)
                 {
-                    Console.WriteLine($"[DEBUG] UDP packet length: {_packet.Length()}");
                     udpListener.BeginSend(_packet.ToArray(), _packet.Length(), _clientEndPoint, null, null);
                 }
             }
-            catch (Exception exception)
+            catch (Exception _ex)
             {
-                Console.WriteLine($"Error while sending data to client {_clientEndPoint} through UDP: {exception}");
+                Console.WriteLine($"Error sending data to {_clientEndPoint} via UDP: {_ex}");
             }
         }
+
         private static void InitializeServerData()
         {
-            for (int i = 1; i <= game_max_players; i++)
+            for (int i = 1; i <= MaxPlayers; i++)
             {
                 clients.Add(i, new Client(i));
             }
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
-                { (int) ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int) ClientPackets.udpTestReceived, ServerHandle.UDPTestReceived }
+                { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
+                { (int)ClientPackets.updTestReceived, ServerHandle.UDPTestReceived }
             };
-            Console.WriteLine($"Initialized packets");
+            Console.WriteLine("Initialized packets.");
         }
     }
 }

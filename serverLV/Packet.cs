@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,8 +15,7 @@ namespace GameServer
     public enum ClientPackets
     {
         welcomeReceived = 1,
-        udpTestReceived
-
+        updTestReceived
     }
 
     public class Packet : IDisposable
