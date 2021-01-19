@@ -28,7 +28,7 @@ namespace GameServer
 
         public static void UdpPlayerMoved(int _fromClient, Packet _packet)
         {
-            Console.WriteLine($"Player (ID: {_fromClient} just moved.");
+            Console.WriteLine($"Player (ID: {_fromClient}) just moved.");
         }
     }
 }

@@ -180,7 +180,7 @@ namespace GameServer
 
         public void SendIntoGame(string _playerName)
         {
-            player = new Player(id, _playerName, new Vector2(0, 0));
+            player = new Player(id, _playerName, new Vector3());
 
             foreach (Client c in Server.clients.Values)
             {
