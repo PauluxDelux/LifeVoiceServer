@@ -25,5 +25,10 @@ namespace GameServer
 
             Console.WriteLine($"Received packet via UDP. Contains message: {_msg}");
         }
+
+        public static void UdpPlayerMoved(int _fromClient, Packet _packet)
+        {
+            Console.WriteLine($"Player (ID: {_fromClient} just moved.");
+        }
     }
 }

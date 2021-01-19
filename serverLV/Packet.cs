@@ -10,16 +10,15 @@ namespace GameServer
     {
         welcome = 1,
         udpTest,
-        spawnPlayer,
-        playerPosition,
-        playerRotation
+        spawnPlayer
     }
 
     /// <summary>Sent from client to server.</summary>
     public enum ClientPackets
     {
         welcomeReceived = 1,
-        updTestReceived
+        updTestReceived,
+        udpPlayerMovement
     }
 
     public class Packet : IDisposable
