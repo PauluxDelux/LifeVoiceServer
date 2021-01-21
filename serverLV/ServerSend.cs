@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Numerics;
 
 namespace GameServer
 {
@@ -91,6 +92,18 @@ namespace GameServer
                 _packet.Write(_player.position.Z);
 
                 SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void udpPlayerMovement(Player _player){
+            using (Packet _packet =  new Packet((int)ServerPackets.udpPlayerMovement))
+            {
+                _packet.Write(_player.id);
+                _packet.Write(_player.position.X);
+                _packet.Write(_player.position.Y);
+                _packet.Write(_player.position.Z);
+
+                SendUDPDataToAll(_player.id, _packet);
             }
         }
         #endregion

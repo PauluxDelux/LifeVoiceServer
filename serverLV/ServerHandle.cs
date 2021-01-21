@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Numerics;
 
 namespace GameServer
 {
@@ -29,6 +30,13 @@ namespace GameServer
         public static void UdpPlayerMoved(int _fromClient, Packet _packet)
         {
             Console.WriteLine($"Player (ID: {_fromClient}) just moved.");
+
+            float _myX = _packet.ReadFloat();
+            float _myY = _packet.ReadFloat();
+            float _myZ = _packet.ReadFloat();
+            Server.clients[_fromClient].player.position = new Vector3(_myX, _myY, _myZ);
+
+            ServerSend.udpPlayerMovement(Server.clients[_fromClient].player);
         }
     }
 }

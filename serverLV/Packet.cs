@@ -10,7 +10,8 @@ namespace GameServer
     {
         welcome = 1,
         udpTest,
-        spawnPlayer
+        spawnPlayer,
+        udpPlayerMovement
     }
 
     /// <summary>Sent from client to server.</summary>
