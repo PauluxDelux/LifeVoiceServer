@@ -182,6 +182,7 @@ namespace GameServer
         {
             player = new Player(id, _playerName, new Vector3());
 
+            // Pour le client actuel : spawn tous les autres clients
             foreach (Client c in Server.clients.Values)
             {
                 if (c.player != null)
@@ -193,11 +194,15 @@ namespace GameServer
                 }
             }
 
+            // Pour tous les autres clients : spawn le client actuel
             foreach (Client c in Server.clients.Values)
             {
                 if (c.player != null)
                 {
-                    ServerSend.SpawnPlayer(c.id, player);
+                    if (c.id != id)
+                    {
+                        ServerSend.SpawnPlayer(c.id, player);
+                    }
                 }
             }
         }
